@@ -10,14 +10,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // direccion de prueba donde guardo las imagenes en render 
-fs.writeFile(filePath, base64Data, 'base64', (err) => {
-    if (err) {
-        console.error('Error saving the image:', err);
-        return res.status(500).json({ message: 'Failed to save image' });
+// Function to handle base64 image data and save it as a file
+app.post('/save-image', (req, res) => {
+    const { imageData } = req.body;
+
+    // Validate that image data is present
+    if (!imageData) {
+        return res.status(400).json({ message: 'No image data provided' });
     }
-    console.log(`Image saved to: ${filePath}`);
-    res.json({ message: 'Image saved successfully', filename });
+
+    // Remove the "data:image/png;base64," part from the base64 data
+    const base64Data = imageData.replace(/^data:image\/png;base64,/, "");
+
+    // Create a unique filename for the image
+    const filename = `image-${Date.now()}.png`;
+    const filePath = path.join(imagesDir, filename); // Asegúrate de definir 'filePath' correctamente
+
+    // Write the image to the file system
+    fs.writeFile(filePath, base64Data, 'base64', (err) => {
+        if (err) {
+            console.error('Error saving the image:', err);
+            return res.status(500).json({ message: 'Failed to save image' });
+        }
+        res.json({ message: 'Image saved successfully', filename });
+    });
 });
+
 //
 
 
