@@ -11,30 +11,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // direccion de prueba donde guardo las imagenes en render 
 // Function to handle base64 image data and save it as a file
-app.post('/save-image', (req, res) => {
-    const { imageData } = req.body;
-
-    // Validate that image data is present
-    if (!imageData) {
-        return res.status(400).json({ message: 'No image data provided' });
-    }
-
-    // Remove the "data:image/png;base64," part from the base64 data
-    const base64Data = imageData.replace(/^data:image\/png;base64,/, "");
-
-    // Create a unique filename for the image
-    const filename = `image-${Date.now()}.png`;
-    const filePath = path.join(imagesDir, filename); // Asegúrate de definir 'filePath' correctamente
-
-    // Write the image to the file system
-    fs.writeFile(filePath, base64Data, 'base64', (err) => {
-        if (err) {
-            console.error('Error saving the image:', err);
-            return res.status(500).json({ message: 'Failed to save image' });
-        }
-        res.json({ message: 'Image saved successfully', filename });
-    });
-});
 
 //
 
@@ -65,6 +41,32 @@ if (!fs.existsSync(imagesDir)) {
     fs.mkdirSync(imagesDir, { recursive: true });
     console.log("Images directory created.");
 }
+
+
+// verificar permisos de escritura 
+fs.access(imagesDir, fs.constants.W_OK, (err) => {
+    if (err) {
+        console.error(`No write access to directory: ${imagesDir}`);
+    } else {
+        console.log(`Write access confirmed for directory: ${imagesDir}`);
+    }
+});
+
+
+// verificar con un archivo de prueba 
+const testFilePath = path.join(imagesDir, 'test.txt');
+
+fs.writeFile(testFilePath, 'Test content', (err) => {
+    if (err) {
+        console.error(`Failed to write to directory: ${imagesDir}`);
+    } else {
+        console.log(`Successfully wrote test file to directory: ${imagesDir}`);
+    }
+});
+
+
+
+
 
 // Function to generate a random note ID
 function generateNoteId() {
