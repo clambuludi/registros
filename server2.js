@@ -65,6 +65,9 @@ fs.writeFile(testFilePath, 'Test content', (err) => {
 });
 
 
+// inspeccionar la carpeta directamente en el servidor  PRUEBA
+const imageFiles = fs.readdirSync(imagesDir);
+console.log("Archivos en la carpeta de imágenes:", imageFiles);
 
 
 
