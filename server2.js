@@ -42,6 +42,10 @@ if (!fs.existsSync(imagesDir)) {
     console.log("Images directory created.");
 }
 
+// Listar los archivos existentes al iniciar el servidor  PRUEBA
+const imageFiles = fs.readdirSync(imagesDir);
+console.log("Archivos en la carpeta de imágenes:", imageFiles);
+
 
 // verificar permisos de escritura 
 fs.access(imagesDir, fs.constants.W_OK, (err) => {
@@ -138,9 +142,19 @@ app.post('/save-image', (req, res) => {
             console.error('Error saving the image:', err);
             return res.status(500).json({ message: 'Failed to save image' });
         }
+
+        // Log the saved image filename to the console
+        console.log("Archivo guardado:", filename);
+
+        // Optional: List all image files in the directory after saving
+        const imageFiles = fs.readdirSync(imagesDir);
+        console.log("Imágenes actuales en la carpeta:", imageFiles);
+
+        // Respond with the name of the saved file
         res.json({ message: 'Image saved successfully', filename });
     });
 });
+
 
 // Start the server and make it listen on all network interfaces (for local access)
 const PORT = 3000;
