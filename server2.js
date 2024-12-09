@@ -102,7 +102,7 @@ app.post('/save-image', (req, res) => {
 });
 
 // Start the server and make it listen on all network interfaces (for local access)
-const PORT = 3001;
+const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server 2 is running on http://localhost:${PORT}`);
 });
