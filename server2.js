@@ -9,6 +9,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Resto de tu configuración de rutas y endpoints
 
 
+// direccion de prueba donde guardo las imagenes en render 
+fs.writeFile(filePath, base64Data, 'base64', (err) => {
+    if (err) {
+        console.error('Error saving the image:', err);
+        return res.status(500).json({ message: 'Failed to save image' });
+    }
+    console.log(`Image saved to: ${filePath}`);
+    res.json({ message: 'Image saved successfully', filename });
+});
+//
+
 
 // Middleware for parsing JSON and URL-encoded form data
 app.use(express.json({ limit: '50mb' }));
