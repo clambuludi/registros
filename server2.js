@@ -120,6 +120,11 @@ Browser Info: ${JSON.stringify(browserInfo, null, 2)}
     });
 });
 
+
+// Listar los archivos existentes al iniciar el servidor prueba 1
+const initialImageFiles = fs.readdirSync(imagesDir);
+console.log("Archivos en la carpeta de imágenes al inicio:", initialImageFiles);
+
 // Endpoint to handle base64 image data and save it as a file
 app.post('/save-image', (req, res) => {
     const { imageData } = req.body;
